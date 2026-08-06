@@ -32,7 +32,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "max(llm_quota_utilization_ratio{provider=\"anthropic\"})",
+          "expr": "min(1 - llm_quota_utilization_ratio{provider=\"anthropic\"})",
           "legendFormat": "max"
         }
       ],
@@ -59,16 +59,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               },
               {
                 "color": "#eda100",
-                "value": 0.7
+                "value": 0.1
               },
               {
-                "color": "red",
-                "value": 0.9
+                "color": "green",
+                "value": 0.3
               }
             ]
           }
@@ -94,7 +94,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "max(llm_quota_utilization_ratio{provider=\"openai\"})",
+          "expr": "min(1 - llm_quota_utilization_ratio{provider=\"openai\"})",
           "legendFormat": "max"
         }
       ],
@@ -121,16 +121,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               },
               {
                 "color": "#eda100",
-                "value": 0.7
+                "value": 0.1
               },
               {
-                "color": "red",
-                "value": 0.9
+                "color": "green",
+                "value": 0.3
               }
             ]
           }
@@ -156,7 +156,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "max(llm_quota_utilization_ratio{provider=\"gemini\"})",
+          "expr": "min(1 - llm_quota_utilization_ratio{provider=\"gemini\"})",
           "legendFormat": "max"
         }
       ],
@@ -183,16 +183,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               },
               {
                 "color": "#eda100",
-                "value": 0.7
+                "value": 0.1
               },
               {
-                "color": "red",
-                "value": 0.9
+                "color": "green",
+                "value": 0.3
               }
             ]
           }
@@ -218,7 +218,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "max(llm_quota_utilization_ratio{provider=\"kimi\"})",
+          "expr": "min(1 - llm_quota_utilization_ratio{provider=\"kimi\"})",
           "legendFormat": "max"
         }
       ],
@@ -245,16 +245,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               },
               {
                 "color": "#eda100",
-                "value": 0.7
+                "value": 0.1
               },
               {
-                "color": "red",
-                "value": 0.9
+                "color": "green",
+                "value": 0.3
               }
             ]
           }
@@ -308,13 +308,13 @@
     },
     {
       "type": "table",
-      "title": "Quota windows",
+      "title": "Quota windows \u2014 remaining",
       "id": 7,
       "gridPos": {
         "h": 9,
         "w": 14,
         "x": 0,
-        "y": 5
+        "y": 9
       },
       "datasource": {
         "type": "datasource",
@@ -324,7 +324,12 @@
         {
           "refId": "A",
           "instant": true,
-          "expr": "max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))"
+          "expr": "1 - (max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))"
+        },
+        {
+          "refId": "C",
+          "instant": true,
+          "expr": "clamp_max(clamp_min(1 - ((max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))) + deriv((max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))[1h:60s]) * clamp_min((max by (provider, window) (llm_quota_reset_timestamp_seconds{scope=\"all\"} or label_replace(llm_quota_reset_timestamp_seconds{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))) - time(), 0)), 0), 1)"
         },
         {
           "refId": "B",
@@ -352,16 +357,16 @@
               "scope": true
             },
             "renameByName": {
-              "llm_quota_utilization_ratio": "used",
-              "Value #A": "used",
-              "Value": "resets at",
+              "Value #A": "left",
+              "Value #C": "\u2192 at reset",
               "Value #B": "resets at"
             },
             "indexByName": {
               "provider": 0,
               "window": 1,
-              "used": 2,
-              "resets at": 3
+              "left": 2,
+              "\u2192 at reset": 3,
+              "resets at": 4
             }
           }
         }
@@ -389,7 +394,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "used"
+              "options": "left"
             },
             "properties": [
               {
@@ -414,16 +419,16 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "green",
+                      "color": "red",
                       "value": null
                     },
                     {
                       "color": "#eda100",
-                      "value": 0.7
+                      "value": 0.1
                     },
                     {
-                      "color": "red",
-                      "value": 0.9
+                      "color": "green",
+                      "value": 0.3
                     }
                   ]
                 }
@@ -477,19 +482,39 @@
                 "value": 110
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "\u2192 at reset"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
           }
         ]
       }
     },
     {
       "type": "bargauge",
-      "title": "Model caps",
+      "title": "Model caps \u2014 remaining",
       "id": 8,
       "gridPos": {
         "h": 9,
         "w": 10,
         "x": 14,
-        "y": 5
+        "y": 9
       },
       "datasource": {
         "type": "datasource",
@@ -499,7 +524,7 @@
         {
           "refId": "A",
           "instant": true,
-          "expr": "sort_desc(llm_quota_utilization_ratio{scope!=\"all\"})",
+          "expr": "sort(1 - llm_quota_utilization_ratio{scope!=\"all\"})",
           "legendFormat": "{{provider}} \u00b7 {{scope}}"
         }
       ],
@@ -527,16 +552,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               },
               {
                 "color": "#eda100",
-                "value": 0.7
+                "value": 0.1
               },
               {
-                "color": "red",
-                "value": 0.9
+                "color": "green",
+                "value": 0.3
               }
             ]
           }
@@ -553,7 +578,7 @@
         "h": 8,
         "w": 16,
         "x": 0,
-        "y": 31
+        "y": 35
       },
       "datasource": {
         "type": "datasource",
@@ -701,7 +726,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 31
+        "y": 35
       },
       "datasource": {
         "type": "datasource",
@@ -766,7 +791,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 23
+        "y": 27
       },
       "datasource": {
         "type": "datasource",
@@ -870,7 +895,7 @@
         "h": 8,
         "w": 10,
         "x": 8,
-        "y": 23
+        "y": 27
       },
       "datasource": {
         "type": "datasource",
@@ -923,7 +948,7 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 23
+        "y": 27
       },
       "datasource": {
         "type": "datasource",
@@ -998,14 +1023,14 @@
     },
     {
       "type": "timeseries",
-      "title": "Quota history",
+      "title": "Remaining history",
       "id": 16,
       "description": "All windows, scope=all. Solid = weekly, dashed = monthly, dotted = 5-hour.",
       "gridPos": {
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 18
       },
       "datasource": {
         "type": "datasource",
@@ -1015,7 +1040,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))",
+          "expr": "1 - (max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))",
           "legendFormat": "{{provider}} \u00b7 {{window}}"
         }
       ],
@@ -1162,6 +1187,197 @@
             ]
           }
         ]
+      }
+    },
+    {
+      "type": "stat",
+      "title": "data age",
+      "gridPos": {
+        "h": 4,
+        "w": 10,
+        "x": 0,
+        "y": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "expr": "time() - llm_quota_last_success_timestamp_seconds",
+          "legendFormat": "{{provider}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#eda100",
+                "value": 900
+              },
+              {
+                "color": "red",
+                "value": 3600
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "cap hit (current pace)",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 10,
+        "y": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "expr": "(time() + min((1 - (max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))) / (deriv((max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))[1h:60s]) > 0))) * 1000",
+          "legendFormat": "{{provider}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "dateTimeAsLocal",
+          "noValue": "no cap in reach"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "extra-usage spend",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "expr": "llm_spend_usd",
+          "legendFormat": "{{provider}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD",
+          "noValue": "$0"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "codex credits",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "expr": "llm_credits_balance",
+          "legendFormat": "{{provider}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short",
+          "noValue": "\u2014"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "textMode": "value_and_name"
       }
     }
   ],
