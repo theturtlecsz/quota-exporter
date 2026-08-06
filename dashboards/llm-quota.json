@@ -9,7 +9,7 @@
   "editable": true,
   "graphTooltip": 1,
   "time": {
-    "from": "now-7d",
+    "from": "now-24h",
     "to": "now"
   },
   "refresh": "5m",
@@ -33,7 +33,8 @@
         {
           "refId": "A",
           "expr": "min(1 - llm_quota_utilization_ratio{provider=\"anthropic\"})",
-          "legendFormat": "max"
+          "legendFormat": "max",
+          "instant": true
         }
       ],
       "options": {
@@ -95,7 +96,8 @@
         {
           "refId": "A",
           "expr": "min(1 - llm_quota_utilization_ratio{provider=\"openai\"})",
-          "legendFormat": "max"
+          "legendFormat": "max",
+          "instant": true
         }
       ],
       "options": {
@@ -157,7 +159,8 @@
         {
           "refId": "A",
           "expr": "min(1 - llm_quota_utilization_ratio{provider=\"gemini\"})",
-          "legendFormat": "max"
+          "legendFormat": "max",
+          "instant": true
         }
       ],
       "options": {
@@ -219,7 +222,8 @@
         {
           "refId": "A",
           "expr": "min(1 - llm_quota_utilization_ratio{provider=\"kimi\"})",
-          "legendFormat": "max"
+          "legendFormat": "max",
+          "instant": true
         }
       ],
       "options": {
@@ -281,7 +285,8 @@
         {
           "refId": "A",
           "instant": true,
-          "expr": "min(llm_quota_reset_timestamp_seconds{scope=\"all\"} >= time()) * 1000"
+          "expr": "bottomk(1, (llm_quota_reset_timestamp_seconds{scope=\"all\"} >= time()) * 1000)",
+          "legendFormat": "{{provider}} \u00b7 {{window}}"
         }
       ],
       "options": {
@@ -289,7 +294,7 @@
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -324,17 +329,20 @@
         {
           "refId": "A",
           "instant": true,
-          "expr": "1 - (max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))"
-        },
-        {
-          "refId": "C",
-          "instant": true,
-          "expr": "clamp_max(clamp_min(1 - ((max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))) + deriv((max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))[1h:60s]) * clamp_min((max by (provider, window) (llm_quota_reset_timestamp_seconds{scope=\"all\"} or label_replace(llm_quota_reset_timestamp_seconds{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))) - time(), 0)), 0), 1)"
+          "expr": "1 - (max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))",
+          "format": "table"
         },
         {
           "refId": "B",
           "instant": true,
-          "expr": "max by (provider, window) (llm_quota_reset_timestamp_seconds{scope=\"all\"} or label_replace(llm_quota_reset_timestamp_seconds{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")) * 1000"
+          "expr": "(max by (provider, window) (llm_quota_reset_timestamp_seconds{scope=\"all\"} or label_replace(llm_quota_reset_timestamp_seconds{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))) * 1000",
+          "format": "table"
+        },
+        {
+          "refId": "C",
+          "instant": true,
+          "expr": "clamp_max(clamp_min(1 - ((max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))) + deriv((max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))[1h:60s]) * clamp_min((max by (provider, window) (llm_quota_reset_timestamp_seconds{scope=\"all\"} or label_replace(llm_quota_reset_timestamp_seconds{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))) - time(), 0)), 0), 1)",
+          "format": "table"
         }
       ],
       "transformations": [
@@ -358,8 +366,8 @@
             },
             "renameByName": {
               "Value #A": "left",
-              "Value #C": "\u2192 at reset",
-              "Value #B": "resets at"
+              "Value #B": "resets at",
+              "Value #C": "\u2192 at reset"
             },
             "indexByName": {
               "provider": 0,
@@ -1259,8 +1267,8 @@
         {
           "refId": "A",
           "instant": true,
-          "expr": "(time() + min((1 - (max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))) / (deriv((max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))[1h:60s]) > 0))) * 1000",
-          "legendFormat": "{{provider}}"
+          "expr": "bottomk(1, (time() + (1 - (max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))) / (deriv((max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")))[1h:60s]) > 0)) * 1000)",
+          "legendFormat": "{{provider}} \u00b7 {{window}}"
         }
       ],
       "fieldConfig": {
@@ -1285,7 +1293,11 @@
             "lastNotNull"
           ]
         },
-        "textMode": "value_and_name"
+        "textMode": "value_and_name",
+        "text": {
+          "valueSize": 22,
+          "titleSize": 14
+        }
       }
     },
     {
