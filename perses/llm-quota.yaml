@@ -11,15 +11,14 @@ spec:
       kind: Panel
       spec:
         display:
-          name: "anthropic \xB7 5-hour \u2014 left"
+          name: "anthropic \xB7 5-hour"
         plugin:
-          kind: GaugeChart
+          kind: StatChart
           spec:
             calculation: last-number
             format:
               unit: percent-decimal
               decimalPlaces: 0
-            max: 1
             thresholds:
               defaultColor: '#e02f44'
               steps:
@@ -27,6 +26,9 @@ spec:
                 color: '#eda100'
               - value: 0.3
                 color: '#1db954'
+            sparkline:
+              width: 2
+            legendMode: 'off'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -39,15 +41,14 @@ spec:
       kind: Panel
       spec:
         display:
-          name: "anthropic \xB7 7-day \u2014 left"
+          name: "anthropic \xB7 7-day"
         plugin:
-          kind: GaugeChart
+          kind: StatChart
           spec:
             calculation: last-number
             format:
               unit: percent-decimal
               decimalPlaces: 0
-            max: 1
             thresholds:
               defaultColor: '#e02f44'
               steps:
@@ -55,6 +56,9 @@ spec:
                 color: '#eda100'
               - value: 0.3
                 color: '#1db954'
+            sparkline:
+              width: 2
+            legendMode: 'off'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -67,15 +71,14 @@ spec:
       kind: Panel
       spec:
         display:
-          name: "anthropic \xB7 fable weekly cap \u2014 left"
+          name: "anthropic \xB7 fable weekly"
         plugin:
-          kind: GaugeChart
+          kind: StatChart
           spec:
             calculation: last-number
             format:
               unit: percent-decimal
               decimalPlaces: 0
-            max: 1
             thresholds:
               defaultColor: '#e02f44'
               steps:
@@ -83,6 +86,9 @@ spec:
                 color: '#eda100'
               - value: 0.3
                 color: '#1db954'
+            sparkline:
+              width: 2
+            legendMode: 'off'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -95,15 +101,14 @@ spec:
       kind: Panel
       spec:
         display:
-          name: "openai \xB7 7-day \u2014 left"
+          name: "openai \xB7 7-day"
         plugin:
-          kind: GaugeChart
+          kind: StatChart
           spec:
             calculation: last-number
             format:
               unit: percent-decimal
               decimalPlaces: 0
-            max: 1
             thresholds:
               defaultColor: '#e02f44'
               steps:
@@ -111,6 +116,9 @@ spec:
                 color: '#eda100'
               - value: 0.3
                 color: '#1db954'
+            sparkline:
+              width: 2
+            legendMode: 'off'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -123,15 +131,14 @@ spec:
       kind: Panel
       spec:
         display:
-          name: "openai \xB7 codex-spark weekly \u2014 left"
+          name: "openai \xB7 codex-spark"
         plugin:
-          kind: GaugeChart
+          kind: StatChart
           spec:
             calculation: last-number
             format:
               unit: percent-decimal
               decimalPlaces: 0
-            max: 1
             thresholds:
               defaultColor: '#e02f44'
               steps:
@@ -139,6 +146,9 @@ spec:
                 color: '#eda100'
               - value: 0.3
                 color: '#1db954'
+            sparkline:
+              width: 2
+            legendMode: 'off'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -151,15 +161,14 @@ spec:
       kind: Panel
       spec:
         display:
-          name: "kimi \xB7 5-hour \u2014 left"
+          name: "kimi \xB7 5-hour"
         plugin:
-          kind: GaugeChart
+          kind: StatChart
           spec:
             calculation: last-number
             format:
               unit: percent-decimal
               decimalPlaces: 0
-            max: 1
             thresholds:
               defaultColor: '#e02f44'
               steps:
@@ -167,6 +176,9 @@ spec:
                 color: '#eda100'
               - value: 0.3
                 color: '#1db954'
+            sparkline:
+              width: 2
+            legendMode: 'off'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -179,15 +191,14 @@ spec:
       kind: Panel
       spec:
         display:
-          name: "kimi \xB7 7-day \u2014 left"
+          name: "kimi \xB7 7-day"
         plugin:
-          kind: GaugeChart
+          kind: StatChart
           spec:
             calculation: last-number
             format:
               unit: percent-decimal
               decimalPlaces: 0
-            max: 1
             thresholds:
               defaultColor: '#e02f44'
               steps:
@@ -195,6 +206,9 @@ spec:
                 color: '#eda100'
               - value: 0.3
                 color: '#1db954'
+            sparkline:
+              width: 2
+            legendMode: 'off'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -207,15 +221,14 @@ spec:
       kind: Panel
       spec:
         display:
-          name: "gemini \xB7 daily \u2014 left (tightest model)"
+          name: "gemini \xB7 daily"
         plugin:
-          kind: GaugeChart
+          kind: StatChart
           spec:
             calculation: last-number
             format:
               unit: percent-decimal
               decimalPlaces: 0
-            max: 1
             thresholds:
               defaultColor: '#e02f44'
               steps:
@@ -223,6 +236,9 @@ spec:
                 color: '#eda100'
               - value: 0.3
                 color: '#1db954'
+            sparkline:
+              width: 2
+            legendMode: 'off'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -234,77 +250,52 @@ spec:
   layouts:
   - kind: Grid
     spec:
-      display:
-        title: anthropic
-        collapse:
-          open: true
       items:
       - x: 0
         y: 0
-        width: 8
-        height: 6
+        width: 6
+        height: 5
         content:
           $ref: '#/spec/panels/a5'
-      - x: 8
+      - x: 6
         y: 0
-        width: 8
-        height: 6
+        width: 6
+        height: 5
         content:
           $ref: '#/spec/panels/a7'
-      - x: 16
+      - x: 12
         y: 0
-        width: 8
-        height: 6
+        width: 6
+        height: 5
         content:
           $ref: '#/spec/panels/afable'
-  - kind: Grid
-    spec:
-      display:
-        title: openai
-        collapse:
-          open: true
-      items:
-      - x: 0
+      - x: 18
         y: 0
-        width: 8
-        height: 6
+        width: 6
+        height: 5
         content:
           $ref: '#/spec/panels/o7'
-      - x: 8
-        y: 0
-        width: 8
-        height: 6
+      - x: 0
+        y: 5
+        width: 6
+        height: 5
         content:
           $ref: '#/spec/panels/ospark'
-  - kind: Grid
-    spec:
-      display:
-        title: kimi
-        collapse:
-          open: true
-      items:
-      - x: 0
-        y: 0
-        width: 8
-        height: 6
+      - x: 6
+        y: 5
+        width: 6
+        height: 5
         content:
           $ref: '#/spec/panels/k5'
-      - x: 8
-        y: 0
-        width: 8
-        height: 6
+      - x: 12
+        y: 5
+        width: 6
+        height: 5
         content:
           $ref: '#/spec/panels/k7'
-  - kind: Grid
-    spec:
-      display:
-        title: gemini
-        collapse:
-          open: true
-      items:
-      - x: 0
-        y: 0
-        width: 8
-        height: 6
+      - x: 18
+        y: 5
+        width: 6
+        height: 5
         content:
           $ref: '#/spec/panels/gdaily'
