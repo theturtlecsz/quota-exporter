@@ -21,7 +21,7 @@
       "id": 1,
       "gridPos": {
         "h": 5,
-        "w": 4,
+        "w": 5,
         "x": 0,
         "y": 0
       },
@@ -83,8 +83,8 @@
       "id": 2,
       "gridPos": {
         "h": 5,
-        "w": 4,
-        "x": 4,
+        "w": 5,
+        "x": 5,
         "y": 0
       },
       "datasource": {
@@ -145,8 +145,8 @@
       "id": 3,
       "gridPos": {
         "h": 5,
-        "w": 4,
-        "x": 8,
+        "w": 5,
+        "x": 10,
         "y": 0
       },
       "datasource": {
@@ -203,74 +203,12 @@
     },
     {
       "type": "stat",
-      "title": "grok",
-      "id": 4,
-      "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 12,
-        "y": 0
-      },
-      "datasource": {
-        "type": "datasource",
-        "uid": "${datasource}"
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "max(llm_quota_utilization_ratio{provider=\"grok\"})",
-          "legendFormat": "max"
-        }
-      ],
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "textMode": "value",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "values": false
-        }
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percentunit",
-          "decimals": 0,
-          "min": 0,
-          "max": 1,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#eda100",
-                "value": 0.7
-              },
-              {
-                "color": "red",
-                "value": 0.9
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "description": "Worst window utilization"
-    },
-    {
-      "type": "stat",
       "title": "kimi",
       "id": 5,
       "gridPos": {
         "h": 5,
-        "w": 4,
-        "x": 16,
+        "w": 5,
+        "x": 15,
         "y": 0
       },
       "datasource": {
@@ -386,12 +324,12 @@
         {
           "refId": "A",
           "instant": true,
-          "expr": "llm_quota_utilization_ratio{scope=\"all\"}"
+          "expr": "max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))"
         },
         {
           "refId": "B",
           "instant": true,
-          "expr": "clamp_min(llm_quota_reset_timestamp_seconds{scope=\"all\"} - time(), 0)"
+          "expr": "clamp_min(max by (provider, window) (llm_quota_reset_timestamp_seconds{scope=\"all\"} or label_replace(llm_quota_reset_timestamp_seconds{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")) - time(), 0)"
         }
       ],
       "transformations": [
@@ -1081,7 +1019,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "llm_quota_utilization_ratio{scope=\"all\"}",
+          "expr": "max by (provider, window) (llm_quota_utilization_ratio{scope=\"all\"} or label_replace(llm_quota_utilization_ratio{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))",
           "legendFormat": "{{provider}} \u00b7 {{window}}"
         }
       ],
