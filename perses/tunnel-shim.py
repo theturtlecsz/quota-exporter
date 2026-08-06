@@ -9,9 +9,27 @@ from socketserver import ThreadingMixIn
 
 UP = "http://127.0.0.1:8080"
 DASH = "/projects/llm/dashboards/llm-quota-native"
-CSS = (b"<style>*{font-family:ui-monospace,\x27Cascadia Mono\x27,"
-       b"\x27JetBrains Mono\x27,\x27Fira Code\x27,\x27Courier New\x27,"
-       b"monospace !important;}</style>")
+CSS = (b"<style>"
+       b"*{font-family:ui-monospace,\x27Cascadia Mono\x27,\x27JetBrains Mono\x27,"
+       b"\x27Fira Code\x27,\x27Courier New\x27,monospace !important;"
+       b"border-radius:0 !important;}"
+       b"html,body{background:#030503 !important;}"
+       b"body::after{content:\x27\x27;position:fixed;inset:0;pointer-events:none;"
+       b"z-index:99999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);}"
+       b".MuiAppBar-root{background:#030503 !important;border-bottom:1px solid #00ff41;box-shadow:none !important;}"
+       b".MuiPaper-root,.MuiCard-root{background:#040804 !important;border:1px solid #114a22 !important;box-shadow:none !important;}"
+       b"body,.MuiTypography-root,.MuiTableCell-root,.MuiButtonBase-root,input,span{color:#9dffb0 !important;}"
+       b"h1,h2,h3,h4,h5,h6,.MuiTypography-h6,.MuiTypography-subtitle1"
+       b"{color:#00ff41 !important;text-shadow:0 0 6px rgba(0,255,65,.45);}"
+       b"a{color:#00ff41 !important;}"
+       b".MuiInputBase-root,.MuiOutlinedInput-root{background:#0a120a !important;}"
+       b"::selection{background:#00ff41;color:#000;}"
+       b".MuiAppBar-root,header.MuiAppBar-root,.MuiAppBar-colorPrimary{background-color:#030503 !important;background-image:none !important;}"
+       b"#root,main{background:#030503 !important;}"
+       b".MuiBox-root{background-color:transparent !important;}"
+       b"div.MuiToolbar-root.MuiToolbar-regular,header div.MuiToolbar-root{background-color:#030503 !important;background-image:none !important;}"
+       b"table.MuiTable-root,tr.MuiTableRow-root,td.MuiTableCell-root,th.MuiTableCell-root{background-color:transparent !important;}"
+       b"</style>")
 
 class P(http.server.BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
@@ -55,12 +73,14 @@ class P(http.server.BaseHTTPRequestHandler):
             return
         data = resp.read()
         ct = resp.headers.get("Content-Type", "")
-        if "text/html" in ct and b"</head>" in data:
+        html = "text/html" in ct
+        if html and b"</head>" in data:
             data = data.replace(b"</head>", CSS + b"</head>", 1)
         self.send_response(getattr(resp, "status", resp.code))
-        for k in ("Content-Type", "Cache-Control", "Location"):
+        for k in ("Content-Type", "Location"):
             if resp.headers.get(k):
                 self.send_header(k, resp.headers[k])
+        self.send_header("Cache-Control", "no-store" if html else resp.headers.get("Cache-Control", "no-cache"))
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
         self.wfile.write(data)
