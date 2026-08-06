@@ -1,0 +1,349 @@
+{
+  "version": 1,
+  "jobId": "9c45a851-2f72-49a4-bf02-b88dff2ddc0a",
+  "sessionId": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+  "scopeKey": "670a721adecf14edd95867b3f38bc4c13b9b8370e6b889afdabb9d4941abdc37",
+  "revision": 41,
+  "createdAt": "2026-08-06T00:55:43.524Z",
+  "updatedAt": "2026-08-06T00:55:43.837Z",
+  "producerGraceExpiresAt": "2026-08-06T00:56:13.524Z",
+  "bestEffortDeadlineAt": "2026-08-06T00:57:04.524Z",
+  "producers": {
+    "core": {
+      "state": "sealed",
+      "intentKey": "b76d130d1fefd2c108ec643c8a3df879013b47c7f854eccccfb82e149d5204ec",
+      "payloadDigest": "b76d130d1fefd2c108ec643c8a3df879013b47c7f854eccccfb82e149d5204ec",
+      "sealedAt": "2026-08-06T00:55:43.532Z",
+      "sealedBy": "foreground"
+    },
+    "wiki": {
+      "state": "no-op",
+      "sealedAt": "2026-08-06T00:55:43.524Z",
+      "sealedBy": "wiki-producer"
+    }
+  },
+  "actions": {
+    "foreground-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 0,
+      "idempotencyKey": "febf6dba2f2536433960a07f7cedce72e946b43ced0896570df80f017b8914d2",
+      "payload": {
+        "transcriptPath": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+        "cwd": "/home/thetu/code/quota-exporter",
+        "reason": "other",
+        "input": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "transcript_path": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+          "cwd": "/home/thetu/code/quota-exporter",
+          "prompt_id": "3cebea0d-fb41-46cb-ac6c-39699624ff85",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "ended_at": "2026-08-06T00:55:43.516Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {
+          "tmux": "/tmp/tmux-1000/default,2363609,0",
+          "tmuxPane": "%0"
+        },
+        "foregroundResult": {
+          "removedTransientFiles": 3,
+          "completedAt": "2026-08-06T00:55:43.531Z"
+        }
+      },
+      "budgetMs": 9000,
+      "completedAt": "2026-08-06T00:55:43.532Z",
+      "lastOutcomeCode": "completed"
+    },
+    "wiki-capture": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 0,
+      "idempotencyKey": "1719cd1ef5b51e0269b78c4cb8c9308c9c1f7b82fd1c067fc034c060f23863f5",
+      "payload": {},
+      "budgetMs": 9000,
+      "completedAt": "2026-08-06T00:55:43.524Z"
+    },
+    "team-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "cee6ac31df545408e1e822247ac249b3f8182a98a5fe8e448ae3b251e55bdee1",
+      "payload": {
+        "transcriptPath": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+        "cwd": "/home/thetu/code/quota-exporter",
+        "reason": "other",
+        "input": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "transcript_path": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+          "cwd": "/home/thetu/code/quota-exporter",
+          "prompt_id": "3cebea0d-fb41-46cb-ac6c-39699624ff85",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "ended_at": "2026-08-06T00:55:43.516Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {
+          "tmux": "/tmp/tmux-1000/default,2363609,0",
+          "tmuxPane": "%0"
+        }
+      },
+      "budgetMs": 9000,
+      "claimedAt": "2026-08-06T00:55:43.561Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "60b15cc4-6c06-4ec9-8936-e68cf30e6f86",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-06T00:55:53.548Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-06T00:55:43.604Z"
+    },
+    "python-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "1f1370c4ac056606059d517e2f106b602d8cbcb04587b3fcc5f3b9f89e649cd0",
+      "payload": {
+        "transcriptPath": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+        "cwd": "/home/thetu/code/quota-exporter",
+        "reason": "other",
+        "input": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "transcript_path": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+          "cwd": "/home/thetu/code/quota-exporter",
+          "prompt_id": "3cebea0d-fb41-46cb-ac6c-39699624ff85",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "ended_at": "2026-08-06T00:55:43.516Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {
+          "tmux": "/tmp/tmux-1000/default,2363609,0",
+          "tmuxPane": "%0"
+        }
+      },
+      "budgetMs": 9000,
+      "claimedAt": "2026-08-06T00:55:43.606Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "29f6c217-780c-49f1-97f6-b0026dc16b9d",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-06T00:55:53.548Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-06T00:55:43.653Z"
+    },
+    "reply-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "0b3a8b47c28b26d56aca004d4f572b96c118f16819c0d35162418816f9a5420a",
+      "payload": {
+        "transcriptPath": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+        "cwd": "/home/thetu/code/quota-exporter",
+        "reason": "other",
+        "input": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "transcript_path": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+          "cwd": "/home/thetu/code/quota-exporter",
+          "prompt_id": "3cebea0d-fb41-46cb-ac6c-39699624ff85",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "ended_at": "2026-08-06T00:55:43.516Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {
+          "tmux": "/tmp/tmux-1000/default,2363609,0",
+          "tmuxPane": "%0"
+        }
+      },
+      "budgetMs": 9000,
+      "claimedAt": "2026-08-06T00:55:43.654Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "a998638e-dc34-4044-929e-aa69136864ad",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-06T00:55:53.548Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-06T00:55:43.698Z"
+    },
+    "callback": {
+      "class": "best-effort",
+      "phase": "deferred-best-effort",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "d068ede2655bf89e0c0950e087d0603d7dcf45538e94f20a654d08c6f4841895",
+      "payload": {
+        "transcriptPath": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+        "cwd": "/home/thetu/code/quota-exporter",
+        "reason": "other",
+        "input": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "transcript_path": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+          "cwd": "/home/thetu/code/quota-exporter",
+          "prompt_id": "3cebea0d-fb41-46cb-ac6c-39699624ff85",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "ended_at": "2026-08-06T00:55:43.516Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {
+          "tmux": "/tmp/tmux-1000/default,2363609,0",
+          "tmuxPane": "%0"
+        }
+      },
+      "budgetMs": 2000,
+      "claimedAt": "2026-08-06T00:55:43.700Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "f27c7175-52eb-48a1-82b7-49c9872add81",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-06T00:55:53.548Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-06T00:55:43.744Z"
+    },
+    "notification": {
+      "class": "best-effort",
+      "phase": "deferred-best-effort",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "89c0438ff63097ce04beb60efb87292ff68a7af350a0ee331f3de9dbf42d62fc",
+      "payload": {
+        "transcriptPath": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+        "cwd": "/home/thetu/code/quota-exporter",
+        "reason": "other",
+        "input": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "transcript_path": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+          "cwd": "/home/thetu/code/quota-exporter",
+          "prompt_id": "3cebea0d-fb41-46cb-ac6c-39699624ff85",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "ended_at": "2026-08-06T00:55:43.516Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {
+          "tmux": "/tmp/tmux-1000/default,2363609,0",
+          "tmuxPane": "%0"
+        }
+      },
+      "budgetMs": 2000,
+      "claimedAt": "2026-08-06T00:55:43.745Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "4437965d-f7e2-4e50-a5cb-66d1c14fdba5",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-06T00:55:53.548Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-06T00:55:43.785Z"
+    },
+    "openclaw": {
+      "class": "best-effort",
+      "phase": "deferred-best-effort",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "31fe8f6e1cf204e27006de511df257326fdd98655122ca437013e8779ffc735b",
+      "payload": {
+        "transcriptPath": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+        "cwd": "/home/thetu/code/quota-exporter",
+        "reason": "other",
+        "input": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "transcript_path": "/home/thetu/.claude/projects/-home-thetu-code-quota-exporter/051ba89b-7e52-4f7b-b317-a44d61d27f09.jsonl",
+          "cwd": "/home/thetu/code/quota-exporter",
+          "prompt_id": "3cebea0d-fb41-46cb-ac6c-39699624ff85",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "051ba89b-7e52-4f7b-b317-a44d61d27f09",
+          "ended_at": "2026-08-06T00:55:43.516Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {
+          "tmux": "/tmp/tmux-1000/default,2363609,0",
+          "tmuxPane": "%0"
+        }
+      },
+      "budgetMs": 2000,
+      "claimedAt": "2026-08-06T00:55:43.786Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "39ed876c-8f28-47ef-b952-dcac9469a1ab",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-06T00:55:53.548Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-06T00:55:43.834Z"
+    }
+  },
+  "owner": null,
+  "phase": "complete",
+  "completion": {
+    "completedAt": "2026-08-06T00:55:43.835Z",
+    "terminalDigest": "5df6bc7aa55b8ea27a0adae656646b439eb9af64f76ab3303d90439d09698a5a",
+    "terminalRevision": 40
+  }
+}

@@ -299,7 +299,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "dtdurations",
+          "unit": "s",
           "decimals": 1
         },
         "overrides": []
@@ -446,7 +446,7 @@
             "properties": [
               {
                 "id": "unit",
-                "value": "dtdurations"
+                "value": "s"
               },
               {
                 "id": "decimals",

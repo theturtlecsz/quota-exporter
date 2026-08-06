@@ -1,0 +1,93 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1785977688029,
+  "projectRoot": "/home/thetu/code/quota-exporter",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pyproject.toml"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "pytest",
+        "version": null,
+        "category": "testing"
+      }
+    ],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": "pytest",
+    "lintCommand": "ruff check",
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "dashboards": {
+      "path": "dashboards",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1785977688027,
+      "keyFiles": [
+        "README.md",
+        "llm-quota.json",
+        "screenshot.png"
+      ]
+    },
+    "nix": {
+      "path": "nix",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1785977688028,
+      "keyFiles": [
+        "module.nix",
+        "package.nix"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1785977688028,
+      "keyFiles": []
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 1,
+      "lastAccessed": 1785977688028,
+      "keyFiles": [
+        "test_parsing.py"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}
