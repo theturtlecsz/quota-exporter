@@ -88,6 +88,19 @@
       ]
     }
   },
-  "hotPaths": [],
+  "hotPaths": [
+    {
+      "path": "src/llm_quota_exporter/providers/gemini.py",
+      "accessCount": 3,
+      "lastAccessed": 1785979460395,
+      "type": "file"
+    },
+    {
+      "path": "src/llm_quota_exporter/providers/anthropic.py",
+      "accessCount": 1,
+      "lastAccessed": 1785980411609,
+      "type": "file"
+    }
+  ],
   "userDirectives": []
 }

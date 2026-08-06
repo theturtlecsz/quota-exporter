@@ -89,6 +89,9 @@ class AnthropicProvider(Provider):
                     "Authorization": f"Bearer {token}",
                     "anthropic-beta": OAUTH_BETA_HEADER,
                     "Accept": "application/json",
+                    # The usage endpoint rate-limits unrecognized agents;
+                    # every ecosystem tool identifies as the claude CLI.
+                    "User-Agent": "claude-cli/2.0.0 (external, cli)",
                 },
             )
         except httpx.HTTPError as exc:
