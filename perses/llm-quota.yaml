@@ -29,8 +29,8 @@ spec:
               max: 1
             visual:
               display: line
-              lineWidth: 2
-              areaOpacity: 0.35
+              lineWidth: 2.5
+              areaOpacity: 0.15
             tooltip:
               enablePinning: true
             querySettings:
@@ -39,7 +39,7 @@ spec:
               colorValue: '#00ff41'
             - queryIndex: 1
               colorMode: fixed
-              colorValue: '#00e5ff'
+              colorValue: '#ff2ec4'
             - queryIndex: 2
               colorMode: fixed
               colorValue: '#ffb000'
@@ -87,8 +87,8 @@ spec:
               max: 1
             visual:
               display: line
-              lineWidth: 2
-              areaOpacity: 0.35
+              lineWidth: 2.5
+              areaOpacity: 0.15
             tooltip:
               enablePinning: true
             querySettings:
@@ -97,16 +97,18 @@ spec:
               colorValue: '#00ff41'
             - queryIndex: 1
               colorMode: fixed
-              colorValue: '#009929'
+              colorValue: '#00c433'
+              lineStyle: dashed
             - queryIndex: 2
               colorMode: fixed
               colorValue: '#ffb000'
             - queryIndex: 3
               colorMode: fixed
-              colorValue: '#ff6a00'
+              colorValue: '#ffd24d'
+              lineStyle: dashed
             - queryIndex: 4
               colorMode: fixed
-              colorValue: '#00e5ff'
+              colorValue: '#ff2ec4'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -165,14 +167,14 @@ spec:
               max: 1
             visual:
               display: line
-              lineWidth: 2
-              areaOpacity: 0.35
+              lineWidth: 2.5
+              areaOpacity: 0.15
             tooltip:
               enablePinning: true
             querySettings:
             - queryIndex: 0
               colorMode: fixed
-              colorValue: '#00ff41'
+              colorValue: '#00e5ff'
         queries:
         - kind: TimeSeriesQuery
           spec:
