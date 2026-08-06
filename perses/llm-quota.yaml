@@ -31,10 +31,18 @@ spec:
               display: line
               lineWidth: 2
               areaOpacity: 0.35
-              palette:
-                mode: categorical
             tooltip:
               enablePinning: true
+            querySettings:
+            - queryIndex: 0
+              colorMode: fixed
+              colorValue: '#00ff41'
+            - queryIndex: 1
+              colorMode: fixed
+              colorValue: '#00e5ff'
+            - queryIndex: 2
+              colorMode: fixed
+              colorValue: '#ffb000'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -50,6 +58,13 @@ spec:
               spec:
                 query: 1 - llm_quota_utilization_ratio{provider="kimi",scope="all",window="five_hour"}
                 seriesNameFormat: kimi
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: 1 - llm_quota_utilization_ratio{provider="openai",scope="all",window="five_hour"}
+                seriesNameFormat: openai
     d7:
       kind: Panel
       spec:
@@ -74,10 +89,24 @@ spec:
               display: line
               lineWidth: 2
               areaOpacity: 0.35
-              palette:
-                mode: categorical
             tooltip:
               enablePinning: true
+            querySettings:
+            - queryIndex: 0
+              colorMode: fixed
+              colorValue: '#00ff41'
+            - queryIndex: 1
+              colorMode: fixed
+              colorValue: '#009929'
+            - queryIndex: 2
+              colorMode: fixed
+              colorValue: '#ffb000'
+            - queryIndex: 3
+              colorMode: fixed
+              colorValue: '#ff6a00'
+            - queryIndex: 4
+              colorMode: fixed
+              colorValue: '#00e5ff'
         queries:
         - kind: TimeSeriesQuery
           spec:
@@ -138,10 +167,12 @@ spec:
               display: line
               lineWidth: 2
               areaOpacity: 0.35
-              palette:
-                mode: categorical
             tooltip:
               enablePinning: true
+            querySettings:
+            - queryIndex: 0
+              colorMode: fixed
+              colorValue: '#00ff41'
         queries:
         - kind: TimeSeriesQuery
           spec:
