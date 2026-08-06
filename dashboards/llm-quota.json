@@ -17,7 +17,7 @@
   "panels": [
     {
       "type": "stat",
-      "title": "anthropic",
+      "title": "anthropic \u2014 left in tightest window",
       "id": 1,
       "gridPos": {
         "h": 5,
@@ -32,8 +32,8 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "min(1 - llm_quota_utilization_ratio{provider=\"anthropic\"})",
-          "legendFormat": "max",
+          "expr": "bottomk(1, 1 - llm_quota_utilization_ratio{provider=\"anthropic\", scope=\"all\"})",
+          "legendFormat": "{{window}} window",
           "instant": true
         }
       ],
@@ -42,12 +42,16 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
           "values": false
+        },
+        "text": {
+          "valueSize": 60,
+          "titleSize": 14
         }
       },
       "fieldConfig": {
@@ -80,7 +84,7 @@
     },
     {
       "type": "stat",
-      "title": "openai",
+      "title": "openai \u2014 left in tightest window",
       "id": 2,
       "gridPos": {
         "h": 5,
@@ -95,8 +99,8 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "min(1 - llm_quota_utilization_ratio{provider=\"openai\"})",
-          "legendFormat": "max",
+          "expr": "bottomk(1, 1 - llm_quota_utilization_ratio{provider=\"openai\", scope=\"all\"})",
+          "legendFormat": "{{window}} window",
           "instant": true
         }
       ],
@@ -105,12 +109,16 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
           "values": false
+        },
+        "text": {
+          "valueSize": 60,
+          "titleSize": 14
         }
       },
       "fieldConfig": {
@@ -143,7 +151,7 @@
     },
     {
       "type": "stat",
-      "title": "gemini",
+      "title": "gemini \u2014 left in tightest window",
       "id": 3,
       "gridPos": {
         "h": 5,
@@ -158,8 +166,8 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "min(1 - llm_quota_utilization_ratio{provider=\"gemini\"})",
-          "legendFormat": "max",
+          "expr": "bottomk(1, 1 - label_replace(llm_quota_utilization_ratio{provider=\"gemini\", window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\"))",
+          "legendFormat": "{{window}} window",
           "instant": true
         }
       ],
@@ -168,12 +176,16 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
           "values": false
+        },
+        "text": {
+          "valueSize": 60,
+          "titleSize": 14
         }
       },
       "fieldConfig": {
@@ -206,7 +218,7 @@
     },
     {
       "type": "stat",
-      "title": "kimi",
+      "title": "kimi \u2014 left in tightest window",
       "id": 5,
       "gridPos": {
         "h": 5,
@@ -221,8 +233,8 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "min(1 - llm_quota_utilization_ratio{provider=\"kimi\"})",
-          "legendFormat": "max",
+          "expr": "bottomk(1, 1 - llm_quota_utilization_ratio{provider=\"kimi\", scope=\"all\"})",
+          "legendFormat": "{{window}} window",
           "instant": true
         }
       ],
@@ -231,12 +243,16 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "textMode": "value",
+        "textMode": "value_and_name",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
           "values": false
+        },
+        "text": {
+          "valueSize": 60,
+          "titleSize": 14
         }
       },
       "fieldConfig": {
