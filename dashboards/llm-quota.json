@@ -281,7 +281,7 @@
         {
           "refId": "A",
           "instant": true,
-          "expr": "min(clamp_min(llm_quota_reset_timestamp_seconds{scope=\"all\"} - time(), 0))"
+          "expr": "min(llm_quota_reset_timestamp_seconds{scope=\"all\"} >= time()) * 1000"
         }
       ],
       "options": {
@@ -299,7 +299,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "s",
+          "unit": "dateTimeAsLocal",
           "decimals": 1
         },
         "overrides": []
@@ -329,7 +329,7 @@
         {
           "refId": "B",
           "instant": true,
-          "expr": "clamp_min(max by (provider, window) (llm_quota_reset_timestamp_seconds{scope=\"all\"} or label_replace(llm_quota_reset_timestamp_seconds{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")) - time(), 0)"
+          "expr": "max by (provider, window) (llm_quota_reset_timestamp_seconds{scope=\"all\"} or label_replace(llm_quota_reset_timestamp_seconds{provider=\"gemini\",window=\"bucket\"}, \"window\", \"daily\", \"window\", \"bucket\")) * 1000"
         }
       ],
       "transformations": [
@@ -354,14 +354,14 @@
             "renameByName": {
               "llm_quota_utilization_ratio": "used",
               "Value #A": "used",
-              "Value": "resets in",
-              "Value #B": "resets in"
+              "Value": "resets at",
+              "Value #B": "resets at"
             },
             "indexByName": {
               "provider": 0,
               "window": 1,
               "used": 2,
-              "resets in": 3
+              "resets at": 3
             }
           }
         }
@@ -441,20 +441,16 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "resets in"
+              "options": "resets at"
             },
             "properties": [
               {
                 "id": "unit",
-                "value": "s"
-              },
-              {
-                "id": "decimals",
-                "value": 1
+                "value": "dateTimeAsLocal"
               },
               {
                 "id": "custom.width",
-                "value": 150
+                "value": 190
               }
             ]
           },
