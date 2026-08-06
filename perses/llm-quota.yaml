@@ -5,7 +5,7 @@ metadata:
 spec:
   display:
     name: LLM Quotas
-  duration: 24h
+  duration: 6h
   panels:
     h5:
       kind: Panel
@@ -29,8 +29,10 @@ spec:
               max: 1
             visual:
               display: line
-              lineWidth: 2.5
-              areaOpacity: 0.15
+              lineWidth: 3
+              areaOpacity: 0.1
+              showPoints: auto
+              connectNulls: true
             tooltip:
               enablePinning: true
             querySettings:
@@ -87,8 +89,10 @@ spec:
               max: 1
             visual:
               display: line
-              lineWidth: 2.5
-              areaOpacity: 0.15
+              lineWidth: 3
+              areaOpacity: 0
+              showPoints: auto
+              connectNulls: true
             tooltip:
               enablePinning: true
             querySettings:
@@ -97,14 +101,14 @@ spec:
               colorValue: '#00ff41'
             - queryIndex: 1
               colorMode: fixed
-              colorValue: '#00c433'
+              colorValue: '#00ff41'
               lineStyle: dashed
             - queryIndex: 2
               colorMode: fixed
               colorValue: '#ffb000'
             - queryIndex: 3
               colorMode: fixed
-              colorValue: '#ffd24d'
+              colorValue: '#ffb000'
               lineStyle: dashed
             - queryIndex: 4
               colorMode: fixed
@@ -167,8 +171,10 @@ spec:
               max: 1
             visual:
               display: line
-              lineWidth: 2.5
+              lineWidth: 3
               areaOpacity: 0.15
+              showPoints: auto
+              connectNulls: true
             tooltip:
               enablePinning: true
             querySettings:
