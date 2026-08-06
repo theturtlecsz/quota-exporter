@@ -1,0 +1,422 @@
+kind: Dashboard
+metadata:
+  name: llm-quota-native
+  project: llm
+spec:
+  display:
+    name: LLM Quotas
+  duration: 24h
+  panels:
+    anthropic:
+      kind: Panel
+      spec:
+        display:
+          name: "anthropic \u2014 left"
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last-number
+            format:
+              unit: percent-decimal
+              decimalPlaces: 0
+            thresholds:
+              defaultColor: '#e02f44'
+              steps:
+              - value: 0.1
+                color: '#eda100'
+              - value: 0.3
+                color: '#1db954'
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: bottomk(1, 1 - llm_quota_utilization_ratio{provider="anthropic",
+                  scope="all"})
+                seriesNameFormat: '{{window}} window'
+    openai:
+      kind: Panel
+      spec:
+        display:
+          name: "openai \u2014 left"
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last-number
+            format:
+              unit: percent-decimal
+              decimalPlaces: 0
+            thresholds:
+              defaultColor: '#e02f44'
+              steps:
+              - value: 0.1
+                color: '#eda100'
+              - value: 0.3
+                color: '#1db954'
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: bottomk(1, 1 - llm_quota_utilization_ratio{provider="openai",
+                  scope="all"})
+                seriesNameFormat: '{{window}} window'
+    gemini:
+      kind: Panel
+      spec:
+        display:
+          name: "gemini \u2014 left"
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last-number
+            format:
+              unit: percent-decimal
+              decimalPlaces: 0
+            thresholds:
+              defaultColor: '#e02f44'
+              steps:
+              - value: 0.1
+                color: '#eda100'
+              - value: 0.3
+                color: '#1db954'
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: bottomk(1, 1 - llm_quota_utilization_ratio{provider="gemini",
+                  window="bucket"})
+                seriesNameFormat: daily window
+    kimi:
+      kind: Panel
+      spec:
+        display:
+          name: "kimi \u2014 left"
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last-number
+            format:
+              unit: percent-decimal
+              decimalPlaces: 0
+            thresholds:
+              defaultColor: '#e02f44'
+              steps:
+              - value: 0.1
+                color: '#eda100'
+              - value: 0.3
+                color: '#1db954'
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: bottomk(1, 1 - llm_quota_utilization_ratio{provider="kimi",
+                  scope="all"})
+                seriesNameFormat: '{{window}} window'
+    soonest:
+      kind: Panel
+      spec:
+        display:
+          name: soonest reset
+          description: hours until the next quota window resets
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last-number
+            format:
+              unit: hours
+              decimalPlaces: 1
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: (min(llm_quota_reset_timestamp_seconds{scope="all"} >= time())
+                  - time()) / 3600
+    dataage:
+      kind: Panel
+      spec:
+        display:
+          name: oldest data
+          description: age of the stalest provider poll
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last-number
+            format:
+              unit: minutes
+              decimalPlaces: 1
+            thresholds:
+              defaultColor: '#1db954'
+              steps:
+              - value: 15
+                color: '#eda100'
+              - value: 60
+                color: '#e02f44'
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: max(time() - llm_quota_last_success_timestamp_seconds) / 60
+    caphit:
+      kind: Panel
+      spec:
+        display:
+          name: cap hit at current pace
+          description: hours until the fastest-burning window hits its cap
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last-number
+            format:
+              unit: hours
+              decimalPlaces: 1
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: min((1 - max by (provider, window) (llm_quota_utilization_ratio{scope="all"}))
+                  / (deriv((max by (provider, window) (llm_quota_utilization_ratio{scope="all"}))[1h:60s])
+                  > 0)) / 3600
+    spend:
+      kind: Panel
+      spec:
+        display:
+          name: extra-usage spend (USD)
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last-number
+            format:
+              unit: decimal
+              decimalPlaces: 2
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: llm_spend_usd
+                seriesNameFormat: '{{provider}}'
+    credits:
+      kind: Panel
+      spec:
+        display:
+          name: codex credits
+        plugin:
+          kind: StatChart
+          spec:
+            calculation: last-number
+            format:
+              unit: decimal
+              decimalPlaces: 0
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: llm_credits_balance
+                seriesNameFormat: '{{provider}}'
+    windows:
+      kind: Panel
+      spec:
+        display:
+          name: Quota windows
+        plugin:
+          kind: Table
+          spec:
+            columnSettings:
+            - name: provider
+              header: provider
+            - name: window
+              header: window
+            - name: 'value #1'
+              header: left %
+              align: right
+            - name: 'value #2'
+              header: at reset %
+              align: right
+            - name: 'value #3'
+              header: resets in (h)
+              align: right
+            - name: timestamp
+              hide: true
+            transforms:
+            - kind: MergeSeries
+              spec: {}
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: round(100 * (1 - max by (provider, window) (llm_quota_utilization_ratio{scope="all"}
+                  or label_replace(llm_quota_utilization_ratio{provider="gemini",window="bucket"},
+                  "window", "daily", "window", "bucket"))))
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: round(100 * clamp_max(clamp_min(1 - ((max by (provider, window)
+                  (llm_quota_utilization_ratio{scope="all"} or label_replace(llm_quota_utilization_ratio{provider="gemini",window="bucket"},
+                  "window", "daily", "window", "bucket"))) + deriv((max by (provider,
+                  window) (llm_quota_utilization_ratio{scope="all"} or label_replace(llm_quota_utilization_ratio{provider="gemini",window="bucket"},
+                  "window", "daily", "window", "bucket")))[1h:60s]) * clamp_min((max
+                  by (provider, window) (llm_quota_reset_timestamp_seconds{scope="all"}
+                  or label_replace(llm_quota_reset_timestamp_seconds{provider="gemini",window="bucket"},
+                  "window", "daily", "window", "bucket"))) - time(), 0)), 0), 1))
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: round(((max by (provider, window) (llm_quota_reset_timestamp_seconds{scope="all"}
+                  or label_replace(llm_quota_reset_timestamp_seconds{provider="gemini",window="bucket"},
+                  "window", "daily", "window", "bucket"))) - time()) / 360) / 10
+    caps:
+      kind: Panel
+      spec:
+        display:
+          name: "Model caps \u2014 remaining"
+        plugin:
+          kind: BarChart
+          spec:
+            calculation: last-number
+            format:
+              unit: percent-decimal
+              decimalPlaces: 0
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: sort(1 - llm_quota_utilization_ratio{scope!="all"})
+                seriesNameFormat: "{{provider}} \xB7 {{scope}}"
+    history:
+      kind: Panel
+      spec:
+        display:
+          name: Remaining history
+        plugin:
+          kind: TimeSeriesChart
+          spec:
+            legend:
+              position: bottom
+              mode: list
+            yAxis:
+              format:
+                unit: percent-decimal
+                decimalPlaces: 0
+              min: 0
+              max: 1
+        queries:
+        - kind: TimeSeriesQuery
+          spec:
+            plugin:
+              kind: PrometheusTimeSeriesQuery
+              spec:
+                query: 1 - max by (provider, window) (llm_quota_utilization_ratio{scope="all"}
+                  or label_replace(llm_quota_utilization_ratio{provider="gemini",window="bucket"},
+                  "window", "daily", "window", "bucket"))
+                seriesNameFormat: "{{provider}} \xB7 {{window}}"
+  layouts:
+  - kind: Grid
+    spec:
+      display:
+        title: Now
+        collapse:
+          open: true
+      items:
+      - x: 0
+        y: 0
+        width: 5
+        height: 4
+        content:
+          $ref: '#/spec/panels/anthropic'
+      - x: 5
+        y: 0
+        width: 5
+        height: 4
+        content:
+          $ref: '#/spec/panels/openai'
+      - x: 10
+        y: 0
+        width: 5
+        height: 4
+        content:
+          $ref: '#/spec/panels/gemini'
+      - x: 15
+        y: 0
+        width: 5
+        height: 4
+        content:
+          $ref: '#/spec/panels/kimi'
+      - x: 20
+        y: 0
+        width: 4
+        height: 4
+        content:
+          $ref: '#/spec/panels/soonest'
+      - x: 0
+        y: 4
+        width: 6
+        height: 3
+        content:
+          $ref: '#/spec/panels/dataage'
+      - x: 6
+        y: 4
+        width: 6
+        height: 3
+        content:
+          $ref: '#/spec/panels/caphit'
+      - x: 12
+        y: 4
+        width: 6
+        height: 3
+        content:
+          $ref: '#/spec/panels/spend'
+      - x: 18
+        y: 4
+        width: 6
+        height: 3
+        content:
+          $ref: '#/spec/panels/credits'
+      - x: 0
+        y: 7
+        width: 12
+        height: 9
+        content:
+          $ref: '#/spec/panels/windows'
+      - x: 12
+        y: 7
+        width: 12
+        height: 9
+        content:
+          $ref: '#/spec/panels/caps'
+  - kind: Grid
+    spec:
+      display:
+        title: History
+        collapse:
+          open: true
+      items:
+      - x: 0
+        y: 0
+        width: 24
+        height: 9
+        content:
+          $ref: '#/spec/panels/history'
