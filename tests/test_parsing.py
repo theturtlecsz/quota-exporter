@@ -352,3 +352,40 @@ class TestCollectorDedup:
         # first value wins
         first = next(s for s in util.samples if s.labels["window"] == "seven_day")
         assert first.value == pytest.approx(0.5)
+
+
+class TestGeminiAntigravityCredentials:
+    """The agy token file is read-only: normalized shape, never refreshed."""
+
+    def _provider(self, tmp_path):
+        from llm_quota_exporter.providers.gemini import GeminiProvider
+
+        return GeminiProvider(home=tmp_path, client=None)
+
+    def _write_agy_token(self, tmp_path, expiry="2026-08-06T02:19:24.281581499Z"):
+        path = tmp_path / ".gemini" / "antigravity-cli" / "antigravity-oauth-token"
+        path.parent.mkdir(parents=True)
+        path.write_text(
+            '{"token": {"access_token": "at", "token_type": "Bearer",'
+            f' "refresh_token": "rt", "expiry": "{expiry}"}}, "auth_method": "browser"}}'
+        )
+        return path
+
+    def test_antigravity_path_used_when_oauth_creds_absent(self, tmp_path):
+        path = self._write_agy_token(tmp_path)
+        assert self._provider(tmp_path).credential_path() == path
+
+    def test_normalizes_nested_token_with_nanosecond_expiry(self, tmp_path):
+        self._write_agy_token(tmp_path)
+        creds = self._provider(tmp_path)._read_credentials()
+        assert creds["access_token"] == "at"
+        assert creds["expiry_date"] == pytest.approx(parse_iso8601("2026-08-06T02:19:24.281581499Z") * 1000)
+        assert "_no_refresh" in creds
+
+    def test_expired_antigravity_token_is_gap_not_refresh(self, tmp_path):
+        from llm_quota_exporter.providers.base import CredentialsUnavailable
+
+        self._write_agy_token(tmp_path, expiry="2020-01-01T00:00:00Z")
+        provider = self._provider(tmp_path)
+        with pytest.raises(CredentialsUnavailable, match="agy"):
+            provider._get_access_token()

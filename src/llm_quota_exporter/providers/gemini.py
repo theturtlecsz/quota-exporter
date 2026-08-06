@@ -68,7 +68,16 @@ class GeminiProvider(Provider):
     _summary_unavailable: bool = False
 
     def credential_path(self) -> Path:
-        return self._home / ".gemini" / "oauth_creds.json"
+        oauth = self._home / ".gemini" / "oauth_creds.json"
+        if oauth.exists():
+            return oauth
+        # Antigravity CLI (agy) stores a Google OAuth token accepted by the
+        # same Cloud Code quota API; used as a fallback since Google retired
+        # Code Assist for individuals in favor of Antigravity.
+        antigravity = self._home / ".gemini" / "antigravity-cli" / "antigravity-oauth-token"
+        if antigravity.exists():
+            return antigravity
+        return oauth
 
     def fetch(self) -> ProviderSnapshot:
         token = self._get_access_token()
@@ -119,9 +128,24 @@ class GeminiProvider(Provider):
             raise ProviderError(f"unreadable oauth_creds.json: {exc}") from exc
         if not isinstance(creds, dict):
             raise ProviderError("oauth_creds.json is not an object")
+        if isinstance(creds.get("token"), dict):
+            # Antigravity token file shape: {"token": {access_token,
+            # refresh_token, expiry (RFC3339)}, "auth_method": ...}.
+            # Normalized read-only: agy refreshes through its own backend
+            # (no client secret ships in the binary), so an expired token
+            # is a gap until agy next runs, never refreshed from here.
+            token = creds["token"]
+            expiry = parse_iso8601(token.get("expiry"))
+            return {
+                "access_token": token.get("access_token"),
+                "expiry_date": expiry * 1000 if expiry is not None else None,
+                "_no_refresh": "antigravity tokens are refreshed only by the agy CLI",
+            }
         return creds
 
     def _refresh(self, creds: dict[str, Any]) -> str:
+        if reason := creds.get("_no_refresh"):
+            raise CredentialsUnavailable(f"access token expired; {reason}")
         refresh_token = creds.get("refresh_token")
         if not refresh_token:
             raise CredentialsUnavailable("access token expired and no refresh_token present")
